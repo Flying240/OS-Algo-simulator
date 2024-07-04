@@ -1,0 +1,255 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title style="font-family:'Courier New'">File Allocation Simulation</title>
+    <link rel="stylesheet" type="text/css"
+        href="https://stackpath.bootstrapcdn.com/bootstrap/4.5.0/css/bootstrap.min.css">
+    <style>
+        body:before {
+            content: "";
+            position: fixed;
+            left: 0;
+            top: 0;
+            right: 0;
+            bottom: 0;
+            z-index: -1;
+            background-color: rgb(34, 29, 40);
+            /* linear-gradient(to bottom, rgba(57, 23, 194, 1), rgba(146, 25, 156, 1)); */
+        }
+
+        .horizontal-list {
+            display: flex;
+            color: white;
+            justify-content: space-evenly;
+        }
+
+        .horizontal-list li {
+            flex-basis: 0;
+            flex-grow: 1;
+        }
+
+        .container select {
+            padding: 10px;
+            font-size: larger;
+            height: fit-content;
+            width: 300px;
+            text-align: center;
+            background-color: #8283a1;
+            color: white;
+            margin-bottom: 10px;
+            transition: .5s;
+            z-index: -1;
+        }
+
+        .container {
+            width: 70%;
+            text-align: center;
+            padding: 20px;
+            margin-left: 50px;
+            margin: auto;
+
+        }
+
+        .container button {
+            font-size: larger;
+            height: fit-content;
+            width: fit-content;
+            text-align: center;
+            padding: 10px;
+            margin-bottom: 20px;
+            transition: .5s;
+        }
+
+        .container button:hover {
+            transform: translateY(-3px);
+            background-color: rgb(255, 255, 255);
+        }
+
+        .container select:hover {
+            transform: translateY(-3px);
+            background-color: rgb(157, 151, 194)
+        }
+
+        table {
+            margin: auto;
+            min-width: 70vw;
+            text-align: center;
+            border-bottom: 1px solid #ddd;
+            border-collapse: collapse;
+        }
+
+        th,
+        td {
+            border: 1px solid rgb(104, 104, 104);
+            text-align: center;
+            border-bottom: 1px solid #ddd;
+            border-collapse: collapse;
+        }
+
+        th {
+            background-color: #7b9bce;
+            color: white;
+        }
+
+        tr:hover {
+            background-color: rgb(195, 226, 255);
+            color: black;
+        }
+
+        th,
+        td {
+            padding: 10px;
+            text-align: center;
+        }
+
+        .container option {
+            display: block;
+            z-index: -1;
+        }
+
+
+        .jumbotron {
+            margin-left: 1%;
+            margin-right: 1%;
+            margin-top: 5%;
+            background-color: rgb(54, 49, 60);
+            padding-bottom: 10px;
+            padding-top: 20px;
+        }
+
+        .display-4 {
+            color: white;
+            text-align: center;
+        }
+
+        .my-4 {
+            border-color: white;
+        }
+
+        .lead {
+            color: white;
+        }
+    </style>
+</head>
+
+<body>
+    <div class="jumbotron">
+        <h1 class="display-4">File Allocation</h1>
+        <hr class="my-4">
+        <p class="lead">
+            Whenever a hard disk is formatted, a system has many small areas called blocks or sectors that are used to
+            store any kind of file. File allocation methods are different ways by which the operating system stores
+            information in memory blocks, thus allowing the hard drive to be utilized effectively and the file to be
+            accessed.</p>
+        <p class="my-4">
+        <ul class="horizontal-list">
+            <li>Sequential Algorithm</li>
+            <li>Linked Algorithm</li>
+            <li>Indexed Algorithm</li>
+        </ul>
+        </p>
+    </div>
+    <div class="container">
+        <select id="allocationMethod">
+            <option value="sequential">Sequential</option>
+            <option value="linked">Linked</option>
+            <option value="indexed">Indexed</option>
+        </select>
+        <button onclick="allocateFile()">Allocate File</button>
+        <table id="fileTable" style="color: white;">
+            <tr>
+                <th class="active">File</th>
+                <th>Allocation Method</th>
+                <th>Blocks</th>
+            </tr>
+        </table>
+    </div>
+
+    <script>
+        let fileCounter = 1;
+        const totalBlocks = 100;
+        let availableBlocks = Array.from({ length: totalBlocks }, (_, i) => i + 1);
+
+        function allocateFile() {
+            const allocationMethod = document.getElementById("allocationMethod").value;
+            const fileSize = Math.floor(Math.random() * 10) + 1;
+            let blocks;
+
+            switch (allocationMethod) {
+                case "sequential":
+                    blocks = allocateSequentialBlocks(fileSize);
+                    break;
+                case "linked":
+                    blocks = allocateLinkedBlocks(fileSize);
+                    break;
+                case "indexed":
+                    const indexBlock = allocateIndexBlock();
+                    const dataBlocks = allocateDataBlocks(fileSize);
+                    if (indexBlock && dataBlocks.length === fileSize) {
+                        blocks = { indexBlock, dataBlocks };
+                    } else {
+                        blocks = null;
+                    }
+                    break;
+            }
+
+            if (blocks) {
+                displayFileAllocation(fileCounter, allocationMethod, blocks);
+                fileCounter++;
+            } else {
+                alert("Not enough space to allocate the file.");
+            }
+        }
+
+        function allocateSequentialBlocks(fileSize) {
+            if (availableBlocks.length < fileSize) return null;
+            const startBlock = availableBlocks[0];
+            availableBlocks.splice(0, fileSize);
+            return { start: startBlock, end: startBlock + fileSize - 1 };
+        }
+
+        function allocateLinkedBlocks(fileSize) {
+            const blocks = [];
+            for (let i = 0; i < fileSize; i++) {
+                if (availableBlocks.length === 0) break;
+                const index = Math.floor(Math.random() * availableBlocks.length);
+                blocks.push(availableBlocks.splice(index, 1)[0]);
+            }
+            return blocks.length === fileSize ? blocks : null;
+        }
+
+        function allocateIndexBlock() {
+            if (availableBlocks.length === 0) return null;
+            const index = Math.floor(Math.random() * availableBlocks.length);
+            return availableBlocks.splice(index, 1)[0];
+        }
+
+        function allocateDataBlocks(fileSize) {
+            const dataBlocks = [];
+            for (let i = 0; i < fileSize; i++) {
+                if (availableBlocks.length === 0) break;
+                const index = Math.floor(Math.random() * availableBlocks.length);
+                dataBlocks.push(availableBlocks.splice(index, 1)[0]);
+            }
+            return dataBlocks;
+        }
+
+        function displayFileAllocation(fileNumber, allocationMethod, blocks) {
+            const table = document.getElementById("fileTable");
+            const row = table.insertRow(-1);
+            row.insertCell(0).innerHTML = `File ${fileNumber}`;
+            row.insertCell(1).innerHTML = allocationMethod.charAt(0).toUpperCase() + allocationMethod.slice(1);
+
+            if (allocationMethod === "indexed") {
+                row.insertCell(2).innerHTML = `Index: ${blocks.indexBlock}, Data: ${blocks.dataBlocks.join(", ")}`;
+            } else {
+                row.insertCell(2).innerHTML = Array.isArray(blocks) ? blocks.join(", ") : `${blocks.start} - ${blocks.end}`;
+            }
+        }
+    </script>
+</body>
+
+</html>

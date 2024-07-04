@@ -1,0 +1,661 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+    <meta charset="UTF-8">
+    <meta http-equiv="X-UA-Compatible" content="IE=edge">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Page Replacement Visualization</title>
+    <link rel="stylesheet" type="text/css"
+        href="https://stackpath.bootstrapcdn.com/bootstrap/4.5.0/css/bootstrap.min.css">
+    <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.1.3/dist/css/bootstrap.min.css" rel="stylesheet"
+        integrity="sha384-1BmE4kWBq78iYhFldvKuhfTAU6auU8tT94WrHftjDbrCEXSU1oBoqyl2QvZ6jIW3" crossorigin="anonymous">
+    <script src="https://ajax.googleapis.com/ajax/libs/jquery/2.1.1/jquery.min.js"></script>
+</head>
+<style>
+    * {
+        
+    }
+
+    body:before {
+        content: "";
+        position: fixed;
+        left: 0;
+        top: 0;
+        right: 0;
+        bottom: 0;
+        z-index: -1;
+        background-color: rgb(34, 29, 40);
+        /* linear-gradient(to bottom, rgba(57, 23, 194, 1), rgba(146, 25, 156, 1)); */
+    }
+
+
+    .container {
+        display: flex;
+        flex-direction: column;
+        justify-content: center;
+        align-items: center;
+        margin-top: 3rem;
+    }
+
+    .first {
+        display: flex;
+        flex-direction: column;
+        justify-content: center;
+        align-items: center;
+        background-color: #f8f9fa;
+    }
+
+    .second {
+
+        display: flex;
+        flex-direction: column;
+        justify-content: center;
+        align-items: center;
+        margin: 20px;
+        background-color: #f8f9fa;
+    }
+
+    .frmBtn {
+        width: 200px;
+        margin: 10px;
+    }
+
+    .summary {
+        background-color: #f8f9fa;
+
+    }
+
+    .table-bordered td,
+    .table-bordered th,
+    .table-bordered tr {
+        border-color: black !important;
+        border-width: 2px;
+    }
+
+    .horizontal-list {
+        display: flex;
+        color: white;
+        justify-content: space-evenly;
+    }
+
+    .horizontal-list li {
+        flex-basis: 0;
+        flex-grow: 1;
+    }
+
+    .jumbotron {
+        margin-left: 1%;
+        margin-right: 1%;
+        margin-top: 5%;
+        background-color: rgb(54, 49, 60);
+        padding-bottom: 10px;
+        padding-top: 20px;
+    }
+
+    .display-4 {
+        color: white;
+        text-align: center;
+    }
+
+    .my-4 {
+        border-color: white;
+    }
+
+    .lead {
+        color: white;
+    }
+</style>
+
+<body>
+    <div class="jumbotron" style="color: white">
+        <h1 class="display-4">PAGE REPLACEMENT VISUALIZER</h1>
+        <hr class="my-4">
+        <p class="my-4">
+        <ul class="horizontal-list">
+            <li>First-in First-out Algorithm</li>
+            <li>Optimal Algorithm</li>
+            <li>Least Recently Used Algorithm</li>
+        </ul>
+        </p>
+        <hr class="my-4">
+        <div style="display: inline-flex; flex-direction: row; justify-content: center; margin-left: 40%;">
+            <div style="display: flex; flex-direction: column;">
+                Enter the Stream of Pages :
+                <div class="input-string">
+                    <input type="text" id="input_string" required>
+                </div>
+                Enter the number of Frames :
+                <div class="frame-size">
+                    <input id="frame_size" placeholder="" type="number" name="frame" min="1" required>
+                </div>
+                <label for="algo">Choose the Algorithm : </label>
+                <div class="algorithm">
+                    <select id="drop_down" name="algo" required>
+                        <option value="" disabled selected>Select your option</option>
+                        <option value="FIFO">First In First Out</option>
+                        <option value="Optimal">Optimal</option>
+                        <option value="LRU">Least Recently Used</option>
+                    </select>
+                </div>
+                <div class="button">
+                    <input id="btn1" type="button" onclick="disableButton1(); showDiv(); visualize();"
+                        class="frmBtn btn btn-lg btn-block btn-success" value="VISUALIZE">
+                </div>
+                <div class="button">
+                    <input id="btn2" type="button" onclick="enableButton1(); reset();"
+                        class="frmBtn btn btn-lg btn-block btn-danger" value="RESET">
+                </div>
+            </div>
+        </div>
+    </div>
+    <div class="second" id="SUM" style="display:none;">
+        <div class="heading">
+            <h1>VISUALIZATION AND SUMMARY</h1>
+        </div>
+        <div class="data">
+            <table id="tbl" class="table table-bordered">
+                <thead>
+                </thead>
+                <tbody>
+                </tbody>
+            </table>
+        </div>
+        <div class="summary card border border-dark align-items-center">
+            <p id="page_miss"></p>
+            <p id="page_hits"></p>
+            <p id="miss_rate"></p>
+            <p id="hit_rate"></p>
+        </div>
+    </div>
+</body>
+<script>
+    var numberOfFrames, dropDown, inputString, numberOfPages, pageFaults = 0, pageHits = 0, count = 0, missRate, hitRate;
+    var arr = new Array();
+    function visualize() {
+        inputString = document.getElementById("input_string").value;
+        if (inputString == "") {
+            alert("Please Enter all fields");
+            reset();
+        }
+        arr = inputString.split(' ').map(Number);
+        numberOfPages = arr.length;
+        numberOfFrames = parseInt(document.getElementById("frame_size").value);
+        if (isNaN(numberOfFrames)) {
+            alert("Please Enter all fields");
+            reset();
+        }
+        dropDown = document.getElementById("drop_down").value;
+
+        if (numberOfFrames == 0) {
+            alert("Please choose Number Of Frames greater than 1");
+            reset();
+        }
+
+        var table = document.getElementById("tbl");
+        var row = table.insertRow(0);
+        for (let j = 0; j <= (numberOfFrames + 1); j++) {
+            var cell = row.insertCell(j);
+
+            if (j == 0) {
+                cell.innerHTML = "<b>Page Sequence</b>";
+            }
+            else if (j == (numberOfFrames + 1)) {
+                cell.innerHTML = "<b>Page Hit/Miss</b>";
+            }
+            else {
+                cell.innerHTML = `<b>Frame ${j}</b>`;
+            }
+        }
+
+
+        if (dropDown == "FIFO") {
+            var temp = new Array();
+            for (let o = 0; o < numberOfFrames; o++) {
+                temp[o] = -1;
+            }
+
+            for (let m = 0; m < numberOfPages; m++) {
+                let s = 0, k = 0, p;
+
+                for (let n = 0; n < numberOfFrames; n++) {
+                    if (arr[m] == temp[n]) {
+                        s++;
+                        pageHits++;
+                        pageFaults--;
+                    }
+                }
+                pageFaults++;
+
+                if ((pageFaults < numberOfFrames) && (s == 0)) {
+                    for (p = 0; p < numberOfFrames; p++) {
+                        if (temp[p] == -1)
+                            break;
+                    }
+                    temp[p] = arr[m];
+                }
+                else if (s == 0) {
+                    temp[(pageFaults - 1) % numberOfFrames] = arr[m];
+                }
+
+                row = table.insertRow((count) + 1);
+                cell = row.insertCell((k++));
+                cell.innerHTML = arr[m];
+                count++;
+
+                for (let n = 0; n < numberOfFrames; n++) {
+                    if (temp[n] != -1) {
+                        cell = row.insertCell((k++));
+                        cell.innerHTML = temp[n];
+                    }
+                    else {
+                        cell = row.insertCell((k++));
+                        cell.innerHTML = " - ";
+                    }
+
+                }
+                if (s == 0) {
+                    cell = row.insertCell((k++));
+                    cell.innerHTML = "Miss";
+                    cell.style.backgroundColor = "rgb(255, 77, 77)";
+                }
+                else {
+                    cell = row.insertCell((k++));
+                    cell.innerHTML = "Hit";
+                    cell.style.backgroundColor = "rgb(121, 255, 77)";
+                }
+
+            }
+
+            hitRate = (pageHits / numberOfPages) * 100;
+            missRate = (pageFaults / numberOfPages) * 100;
+
+            document.getElementById("page_miss").innerHTML = "Total Number Of Page Faults : " + `<b>${pageFaults}</b>`;
+            document.getElementById("page_hits").innerHTML = "Total Number Of Page Hits : " + `<b>${pageHits}</b>`;
+            document.getElementById("miss_rate").innerHTML = "Page Miss Rate : " + `<b>${missRate.toFixed(2)}%</b>`;
+            document.getElementById("hit_rate").innerHTML = "Page Hit Rate : " + `<b>${hitRate.toFixed(2)}%</b>`;
+        }
+        else if (dropDown == "Optimal") {
+            let frames = new Array(), temp = new Array(), flag1, flag2, flag3, i, j, t, pos, max, s;
+
+            for (i = 0; i < numberOfFrames; ++i)
+                frames[i] = -1;
+
+            for (i = 0; i < numberOfPages; ++i) {
+                flag1 = flag2 = 0, s = 1, k = 0;
+
+
+                for (j = 0; j < numberOfFrames; ++j) {
+                    //Checking if incoming string is present in frame
+                    if (frames[j] == arr[i]) {
+                        flag1 = flag2 = 1;
+                        pageHits++;
+                        s = 0;
+                        break;
+                    }
+                }
+
+                //If it is a Page miss
+                if (flag1 == 0) {
+                    for (j = 0; j < numberOfFrames; ++j) {
+                        //Checking for empty frames
+                        if (frames[j] == -1) {
+                            pageFaults++;
+                            frames[j] = arr[i];
+                            flag2 = 1;
+                            break;
+                        }
+                    }
+                }
+
+                //If it is a Page miss and frames are full
+                if (flag2 == 0) {
+                    flag3 = 0;
+
+                    for (j = 0; j < numberOfFrames; ++j) {
+                        temp[j] = -1;
+
+                        //Finding the page occuring in future matching with current frame
+                        for (t = i + 1; t < numberOfPages; ++t) {
+                            if (frames[j] == arr[t]) {
+                                temp[j] = t;
+                                break;
+                            }
+                        }
+                    }
+
+                    for (j = 0; j < numberOfFrames; ++j) {
+                        //If no such page is found
+                        if (temp[j] == -1) {
+                            pos = j;
+                            flag3 = 1;
+                            break;
+                        }
+                    }
+
+                    //Finding farthest occuring page 
+                    if (flag3 == 0) {
+                        max = temp[0];
+                        pos = 0;
+
+                        for (j = 1; j < numberOfFrames; ++j) {
+                            if (temp[j] > max) {
+                                max = temp[j];
+                                pos = j;
+                            }
+                        }
+                    }
+                    frames[pos] = arr[i];
+                    pageFaults++;
+                }
+
+                row = table.insertRow((count) + 1);
+                cell = row.insertCell((k++));
+                cell.innerHTML = arr[i];
+                count++;
+
+                for (j = 0; j < numberOfFrames; ++j) {
+                    if (frames[j] == -1) {
+                        cell = row.insertCell((k++));
+                        cell.innerHTML = " - ";
+                    }
+                    else {
+                        cell = row.insertCell((k++));
+                        cell.innerHTML = frames[j];
+                    }
+                }
+                if (s == 0) {
+                    cell = row.insertCell((k++));
+                    cell.innerHTML = "Hit";
+                    cell.style.backgroundColor = "rgb(121, 255, 77)";
+                }
+                else {
+                    cell = row.insertCell((k++));
+                    cell.innerHTML = "Miss";
+                    cell.style.backgroundColor = "rgb(255, 77, 77)";
+                }
+            }
+            hitRate = (pageHits / numberOfPages) * 100;
+            missRate = (pageFaults / numberOfPages) * 100;
+
+            document.getElementById("page_miss").innerHTML = "Total Number Of Page Faults : " + `<b>${pageFaults}</b>`;
+            document.getElementById("page_hits").innerHTML = "Total Number Of Page Hits : " + `<b>${pageHits}</b>`;
+            document.getElementById("miss_rate").innerHTML = "Page Miss Rate : " + `<b>${missRate.toFixed(2)}%</b>`;
+            document.getElementById("hit_rate").innerHTML = "Page Hit Rate : " + `<b>${hitRate.toFixed(2)}%</b>`;
+        }
+        else if (dropDown == "LRU") {
+            let counter = 0, flag1, flag2, i, j, pos, s, k;
+            let frames = new Array();
+            let time = new Array();
+
+            for (i = 0; i < numberOfFrames; ++i) {
+                frames[i] = -1;
+            }
+
+            for (i = 0; i < numberOfPages; ++i) {
+
+                flag1 = flag2 = 0, s = 1, k = 0;
+
+                for (j = 0; j < numberOfFrames; ++j) {
+                    //Checking if incoming string is present in frame
+                    if (frames[j] == arr[i]) {
+                        counter++;
+                        pageHits++;
+                        time[j] = counter;
+                        flag1 = flag2 = 1;
+                        s = 0;
+                        break;
+                    }
+                }
+
+                //If it is a Page miss
+                if (flag1 == 0) {
+                    for (j = 0; j < numberOfFrames; ++j) {
+                        //Checking for empty frames
+                        if (frames[j] == -1) {
+                            counter++;
+                            pageFaults++;
+                            frames[j] = arr[i];
+                            time[j] = counter;
+                            flag2 = 1;
+                            break;
+                        }
+                    }
+                }
+
+                //If it is a Page miss and frames are full
+                if (flag2 == 0) {
+                    pos = findLRU(time, numberOfFrames);
+                    counter++;
+                    pageFaults++;
+                    frames[pos] = arr[i];
+                    time[pos] = counter;
+                }
+
+                row = table.insertRow((count) + 1);
+                cell = row.insertCell((k++));
+                cell.innerHTML = arr[i];
+                count++;
+
+                for (j = 0; j < numberOfFrames; ++j) {
+                    if (frames[j] == -1) {
+                        cell = row.insertCell((k++));
+                        cell.innerHTML = " - ";
+                    }
+                    else {
+                        cell = row.insertCell((k++));
+                        cell.innerHTML = frames[j];
+                    }
+                }
+                if (s == 0) {
+                    cell = row.insertCell((k++));
+                    cell.innerHTML = "Hit";
+                    cell.style.backgroundColor = "rgb(121, 255, 77)";
+                }
+                else {
+                    cell = row.insertCell((k++));
+                    cell.innerHTML = "Miss";
+                    cell.style.backgroundColor = "rgb(255, 77, 77)";
+                }
+
+            }
+            hitRate = (pageHits / numberOfPages) * 100;
+            missRate = (pageFaults / numberOfPages) * 100;
+
+            document.getElementById("page_miss").innerHTML = "Total Number Of Page Faults : " + `<b>${pageFaults}</b>`;
+            document.getElementById("page_hits").innerHTML = "Total Number Of Page Hits : " + `<b>${pageHits}</b>`;
+            document.getElementById("miss_rate").innerHTML = "Page Miss Rate : " + `<b>${missRate.toFixed(2)}%</b>`;
+            document.getElementById("hit_rate").innerHTML = "Page Hit Rate : " + `<b>${hitRate.toFixed(2)}%</b>`;
+
+            function findLRU(time, n) {
+                let i, minimum = time[0], pos = 0;
+
+                for (i = 1; i < n; ++i) {
+                    if (time[i] < minimum) {
+                        minimum = time[i];
+                        pos = i;
+                    }
+                }
+                return pos;
+            }
+        }
+        else if (dropDown == "MRU") {
+            let counter = 0, flag1, flag2, i, j, pos, s, k;
+            let frames = new Array();
+            let time = new Array();
+
+            for (i = 0; i < numberOfFrames; ++i) {
+                frames[i] = -1;
+            }
+
+            for (i = 0; i < numberOfPages; ++i) {
+
+                flag1 = flag2 = 0, s = 1, k = 0;
+
+                for (j = 0; j < numberOfFrames; ++j) {
+                    //Checking if incoming string is present in frame
+                    if (frames[j] == arr[i]) {
+                        counter++;
+                        pageHits++;
+                        time[j] = counter;
+                        flag1 = flag2 = 1;
+                        s = 0;
+                        break;
+                    }
+                }
+
+                //If it is a Page miss
+                if (flag1 == 0) {
+                    for (j = 0; j < numberOfFrames; ++j) {
+                        //Checking for empty frames
+                        if (frames[j] == -1) {
+                            counter++;
+                            pageFaults++;
+                            frames[j] = arr[i];
+                            time[j] = counter;
+                            flag2 = 1;
+                            break;
+                        }
+                    }
+                }
+
+                //If it is a Page miss and frames are full
+                if (flag2 == 0) {
+                    pos = findMRU(time, numberOfFrames);
+                    counter++;
+                    pageFaults++;
+                    frames[pos] = arr[i];
+                    time[pos] = counter;
+                }
+
+                row = table.insertRow((count) + 1);
+                cell = row.insertCell((k++));
+                cell.innerHTML = arr[i];
+                count++;
+
+                for (j = 0; j < numberOfFrames; ++j) {
+                    if (frames[j] == -1) {
+                        cell = row.insertCell((k++));
+                        cell.innerHTML = " - ";
+                    }
+                    else {
+                        cell = row.insertCell((k++));
+                        cell.innerHTML = frames[j];
+                    }
+                }
+                if (s == 0) {
+                    cell = row.insertCell((k++));
+                    cell.innerHTML = "Hit";
+                    cell.style.backgroundColor = "rgb(121, 255, 77)";
+                }
+                else {
+                    cell = row.insertCell((k++));
+                    cell.innerHTML = "Miss";
+                    cell.style.backgroundColor = "rgb(255, 77, 77)";
+                }
+
+            }
+            hitRate = (pageHits / numberOfPages) * 100;
+            missRate = (pageFaults / numberOfPages) * 100;
+
+            document.getElementById("page_miss").innerHTML = "Total Number Of Page Faults : " + `<b>${pageFaults}</b>`;
+            document.getElementById("page_hits").innerHTML = "Total Number Of Page Hits : " + `<b>${pageHits}</b>`;
+            document.getElementById("miss_rate").innerHTML = "Page Miss Rate : " + `<b>${missRate.toFixed(2)}%</b>`;
+            document.getElementById("hit_rate").innerHTML = "Page Hit Rate : " + `<b>${hitRate.toFixed(2)}%</b>`;
+
+            function findMRU(time, n) {
+                let i, maximum = time[0], pos = 0;
+
+                for (i = 1; i < n; ++i) {
+                    if (time[i] > maximum) {
+                        maximum = time[i];
+                        pos = i;
+                    }
+                }
+                return pos;
+            }
+        }
+        else if(dropDown == "Random"){
+            var temp = new Array();
+            for (let o = 0; o < numberOfFrames; o++) {
+                temp[o] = -1;
+            }
+
+            for (let m = 0; m < numberOfPages; m++) {
+                let s = 0, k = 0, p;
+
+                for (let n = 0; n < numberOfFrames; n++) {
+                    if (arr[m] == temp[n]) {
+                        s++;
+                        pageHits++;
+                        pageFaults--;
+                    }
+                }
+                pageFaults++;
+
+                if (s == 0) {
+                    let random = Math.floor((Math.random() * numberOfFrames) + 1);
+                    temp[random-1] = arr[m];
+                }
+
+                row = table.insertRow((count) + 1);
+                cell = row.insertCell((k++));
+                cell.innerHTML = arr[m];
+                count++;
+
+                for (let n = 0; n < numberOfFrames; n++) {
+                    if (temp[n] != -1) {
+                        cell = row.insertCell((k++));
+                        cell.innerHTML = temp[n];
+                    }
+                    else {
+                        cell = row.insertCell((k++));
+                        cell.innerHTML = " - ";
+                    }
+
+                }
+                if (s == 0) {
+                    cell = row.insertCell((k++));
+                    cell.innerHTML = "Miss";
+                    cell.style.backgroundColor = "rgb(255, 77, 77)";
+                }
+                else {
+                    cell = row.insertCell((k++));
+                    cell.innerHTML = "Hit";
+                    cell.style.backgroundColor = "rgb(121, 255, 77)";
+                }
+
+            }
+
+            hitRate = (pageHits / numberOfPages) * 100;
+            missRate = (pageFaults / numberOfPages) * 100;
+
+            document.getElementById("page_miss").innerHTML = "Total Number Of Page Faults : " + `<b>${pageFaults}</b>`;
+            document.getElementById("page_hits").innerHTML = "Total Number Of Page Hits : " + `<b>${pageHits}</b>`;
+            document.getElementById("miss_rate").innerHTML = "Page Miss Rate : " + `<b>${missRate.toFixed(2)}%</b>`;
+            document.getElementById("hit_rate").innerHTML = "Page Hit Rate : " + `<b>${hitRate.toFixed(2)}%</b>`;
+        }
+        else {
+            alert("Please choose a valid algorithm!");
+            reset();
+        }
+    }
+
+    function reset() {
+        location.reload();
+    }
+    function disableButton1() {
+        document.getElementById("btn1").disabled = true;
+    }
+    function enableButton1() {
+        document.getElementById("btn1").disabled = false;
+    }
+    function showDiv() {
+        document.getElementById('SUM').style.display = "block";
+    }
+    function redirect() {
+        window.location.href = "page_replacement_comparison.html";
+    }
+</script>
+
+</html>

@@ -1,0 +1,113 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Reader-Writer Problem Simulation</title>
+  <style>
+    body {
+      font-family: Arial, sans-serif;
+      margin: 0;
+      padding: 0;
+      background-color: #111;
+      color: #fff;
+    }
+
+    .container {
+      max-width: 800px;
+      margin: 50px auto;
+      padding: 20px;
+      text-align: center;
+      background-color: #222;
+      border-radius: 5px;
+      box-shadow: 0 2px 5px rgba(0, 0, 0, 0.1);
+    }
+
+    button {
+      padding: 10px 20px;
+      font-size: 16px;
+      margin: 10px;
+      background-color: #b214f0;
+      color: #fff;
+      border: none;
+      border-radius: 4px;
+      transition: background-color 0.3s ease;
+    }
+
+    button:hover {
+      background-color: #ff3d00;
+    }
+
+    #output {
+      margin-top: 20px;
+      font-weight: bold;
+      color: #ccc;
+    }
+  </style>
+</head>
+
+<body>
+  <div class="container">
+    <h1>Reader-Writer Problem Simulation</h1>
+    <button onclick="startReading()">Start Reading</button>
+    <button onclick="stopReading()">Stop Reading</button>
+    <button onclick="startWriting()">Start Writing</button>
+    <button onclick="stopWriting()">Stop Writing</button>
+    <div id="output"></div>
+  </div>
+
+  <script>
+    let readersCount = 0;
+    let writersCount = 0;
+    let reading = false;
+    let writing = false;
+
+    function startReading() {
+      if (!writing) {
+        readersCount++;
+        reading = true;
+        updateOutput('Reader ' + readersCount + ' started reading.');
+      }
+    }
+
+    function stopReading() {
+      if (reading) {
+        updateOutput('Reader ' + readersCount + ' stopped reading.');
+        readersCount--;
+        if (readersCount === 0) {
+          reading = false;
+        }
+      } else {
+        updateOutput('No readers are currently reading.');
+      }
+    }
+
+    function startWriting() {
+      if (reading || writing) {
+        updateOutput('A writer is already writing. Please wait for the current writer to stop writing.');
+      } else {
+        writersCount++;
+        writing = true;
+        updateOutput('Writer ' + writersCount + ' started writing.');
+      }
+    }
+
+    function stopWriting() {
+      if (writing) {
+        writing = false;
+        updateOutput('Writer ' + writersCount + ' stopped writing.');
+        writersCount--;
+      } else {
+        updateOutput('No writer is currently writing.');
+      }
+    }
+
+    function updateOutput(message) {
+      const output = document.getElementById('output');
+      output.innerHTML += message + '<br>';
+    }
+  </script>
+</body>
+
+</html>

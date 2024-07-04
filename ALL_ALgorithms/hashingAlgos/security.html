@@ -1,0 +1,92 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta http-equiv="X-UA-Compatible" content="IE=edge">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <link rel="stylesheet" href="security.css">
+    <title>Security Methods</title>
+</head>
+<body>
+    <div class="jumbotron">
+        <h1 class="display-4">Security algorithms</h1>
+        <hr class = "my-4">
+        <p class="lead">
+            The security of a computer system is a crucial task. It is a process of ensuring the confidentiality and integrity of the OS. 
+            <br>  A system is said to be secure if its resources are used and accessed as intended under all the circumstances, but no system can guarantee absolute security from several of various malicious threats and unauthorized access.
+            <br>
+        <p class = "my-4">
+            
+                The security of a system can be threatened via two violations: 
+                <br> - Threat: A program that has the potential to cause serious damage to the system.
+                <br> - Attack: An attempt to break security and make unauthorized use of an asset. 
+              
+         
+          <br>
+           
+        </p>
+        To enhance secuirty hashing algorithms are used. We have the following hashing algorithms. <br>
+
+        
+        
+    </div>
+    <br><br>
+    <div class="hasher">
+        <div>
+            <label id="dropdown-label" for="hashes">Choose the type of hash to perform: </label>
+            <select class="round" name="hashes" id="hashes">
+              <option value="1">SHA1</option>
+              <option value="2">SHA256</option>
+              <option value="3">Md4</option>
+              <option value="4">Md5</option>
+              
+              
+            </select>
+          </div>
+          <br><br>
+    
+    
+          <div id="block3" >
+            <textarea name="text" class="textbox" id="input_text" wrap="soft" placeholder="Insert text you want to hash"></textarea>
+            <button id="encrypt" onclick="hash()">Hash it!</button>  
+            <textarea name="text" class="textbox" id="hash" wrap="soft" placeholder="Output hash for given text"></textarea>
+          </div>
+    
+    </div>
+</body>
+
+<script src="sha1.js"></script>
+<script src="sha256.js"></script>
+<script src="md4.js"></script>
+<script src="md5.js"></script>
+<script type="text/javascript">
+    
+
+    function hash() {
+      var dd = document.getElementById("hashes").value;
+      var temp = document.getElementById("input_text").value;
+      if (dd == "1") {
+        var ans = SHA1(temp);
+        document.getElementById("hash").innerHTML = ans;
+      }
+      else if(dd == "2") {
+        var ans = sha256(temp); //here error
+        console.log("In SHA 256")
+        document.getElementById("hash").innerHTML = ans;
+      }
+      else if (dd == "3") {
+        var ans = hex_md4(temp);
+        document.getElementById("hash").innerHTML = ans;
+      }
+      else if (dd == "4") {
+        var ans = md5(temp);
+        document.getElementById("hash").innerHTML = ans;
+      }
+      
+     
+    }
+
+  </script>
+</html>
+
+    

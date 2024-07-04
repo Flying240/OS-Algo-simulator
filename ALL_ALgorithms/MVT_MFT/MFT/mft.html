@@ -1,0 +1,43 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+    <meta charset="UTF-8">
+    <meta http-equiv="X-UA-Compatible" content="IE=edge">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <link rel="stylesheet" type="text/css" href="https://stackpath.bootstrapcdn.com/bootstrap/4.5.0/css/bootstrap.min.css">
+    <link rel="stylesheet" href="/MVT_MFT/css/base.css">
+    <link rel="stylesheet" href="mft.css">
+    <title>MFT</title>
+</head>
+
+<body>
+    <div class="jumbotron">
+        <h1 class="display-4">Mutli-Programming with Fixed Tasks (MFT)</h1>
+        <hr class = "my-4">
+        <p class="lead">
+            Multi-programming with fixed partitioning is a contiguous memory management technique in which the main memory is divided into fixed sized partitions which can be of equal or unequal size. Whenever we have to allocate a process memory then a free partition that is big enough to hold the process is found.</p>
+    </div>
+    <div class="container" style="color: white; display: flex; justify-content: center; margin: auto; width: 50%;">
+        <form id="memoryAllocationForm">
+            <label for="totalMemorySize">Enter total memory size:</label>
+            <input type="number" id="totalMemorySize" required>
+            <br>
+            <label for="blockSize">Enter block size:</label>
+            <input type="number" id="blockSize" required>
+            <br>
+            <label for="numProcesses">Enter number of processes:</label>
+            <input type="number" id="numProcesses" required>
+            <br>
+            <div id="memoryRequirements">
+            </div>
+            <br>
+            <button type ="submit" class="btn btn-primary" onclick="document.getElementById('output').scrollIntoView();">Allocate Memory</button>
+        </form>
+        <div id="memoryBlocks"></div>
+        <div id="output"></div>
+    </div>
+    <script src="mft.js"></script>
+</body>
+
+</html>

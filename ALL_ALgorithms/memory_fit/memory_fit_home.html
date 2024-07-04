@@ -1,0 +1,150 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+    <meta charset="utf-8">
+    <meta content="width=device-width, initial-scale=1.0" name="viewport">
+
+    <title>Memory Allocation Methods</title>
+    <meta content="" name="description">
+    <meta content="" name="keywords">
+    <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.1.3/dist/css/bootstrap.min.css" rel="stylesheet"
+        integrity="sha384-1BmE4kWBq78iYhFldvKuhfTAU6auU8tT94WrHftjDbrCEXSU1oBoqyl2QvZ6jIW3" crossorigin="anonymous">
+    <link rel="stylesheet" type="text/css" href="https://stackpath.bootstrapcdn.com/bootstrap/4.5.0/css/bootstrap.min.css">
+    
+    <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.1.3/dist/js/bootstrap.bundle.min.js"
+        integrity="sha384-ka7Sk0Gln4gmtz2MlQnikT1wXgYsOg+OMhuP+IlRH9sENBO0LRn5q+8nbTov4+1p"
+        crossorigin="anonymous"></script>
+    <link rel="stylesheet" href="styles.css">
+
+</head>
+<script>
+    function navigate(string){
+        window.location.href = string;
+    }
+</script>
+<body>
+    <main id="main">
+        <!-- ======= About Section ======= -->
+
+        <div class="jumbotron">
+            <h1 class="display-4">Memory Allocation Methods</h1>
+            <hr class = "my-4">
+            <p class = "my-4">
+            <div style="color: white;">
+                <ul>
+                    <li><div class="pt-4 pt-lg-0 content d-flex flex-column justify-content-center"
+                        data-aos="fade-up" data-aos-delay="100">
+                        <h3><u>First Fit</u></h3>
+
+                                <div>
+                                    This method keeps the free/busy list of jobs organized by memory location,
+                                    low-ordered to high-ordered memory. In this method, first job claims the first
+                                    available memory with space more than or equal to it’s size. The operating system
+                                    doesn’t search for appropriate partition but just allocate the job to the nearest
+                                    memory partition available with sufficient size
+                                </div>
+
+                        <h4 style="padding-top: 10px;">Advantages</h4>
+                        <p>
+                            It is fast in processing. As the processor allocates the nearest available memory partition
+                            to the job, it is very fast in execution.
+                        </p>
+                        <h4>Disadvantages</h4>
+                        <p>
+                            It wastes a lot of memory. The processor ignores if the size of partition allocated to the
+                            job is very large as compared to the size of job or not. It just allocates the memory. As a
+                            result, a lot of memory is wasted and many jobs may not get space in the memory, and would
+                            have to wait for another job to complete.
+                        </p>
+                        <div class="btn-align">
+                            <button id = "go_button" class="btn btn-primary" onclick="navigate('memory_first_fit.html')">Simulation</button>
+                        </div>
+                        
+                    </div></li>
+                    <hr class = "my-4">
+                    <li><div class=" pt-6 pt-lg-4 content d-flex flex-column justify-content-center"
+                        data-aos="fade-up" data-aos-delay="100">
+                        <h3><u>Next Fit</u></h3>
+                        <ul>
+                            <li>
+                                <div>
+                                    Next fit is a modified version of ‘first fit’. It begins as the first fit to find a
+                                    free partition but when called next time it starts searching from where it left off,
+                                    not from the beginning. This policy makes use of a roving pointer. The pointer moves
+                                    along the memory chain to search for a next fit. This helps in, to avoid the usage
+                                    of memory always from the head (beginning) of the free block chain.
+                                </div>
+                            </li>
+                        </ul>
+                        <h4 style="padding-top: 10px;">Advantages</h4>
+                        <p>Next fit is a very fast searching algorithm and is also comparatively faster than First Fit
+                            and Best Fit Memory Management Algorithms.</p>
+                        <h4>Disadvantages</h4>
+                        <p>
+                            It is more difficult to implement than first fit. It can allocate only the next free holes
+                            even if previous ones are sufficiently large
+                        </p>
+                        <div class="btn-align">
+                            <button id = "go_button" class="btn btn-primary" onclick="navigate('memory_next_fit.html')">Simulation</button>
+                        </div>
+                    </div></li>
+                    <hr class = "my-4">
+                    <li><div class="pt-4 pt-lg-6 content d-flex flex-column justify-content-center"
+                        data-aos="fade-up" data-aos-delay="100">
+                        <h3><u>Best Fit</u></h3>
+                        <ul>
+                            <li>
+                                <div>
+                                    The best fit deals with allocating the smallest free partition which meets the
+                                    requirement of the requesting process. This algorithm first searches the entire list
+                                    of free partitions and considers the smallest hole that is adequate. It then tries
+                                    to find a hole which is close to actual process size needed.
+                                </div>
+                            </li>
+                        </ul>
+                        <h4 style="padding-top: 10px;">Advantages</h4>
+                        <p>
+                            Memory utilization is much better than first fit as it searches the smallest free partition
+                            first available.</p>
+                        <h4>Disadvantages</h4>
+                        <p>
+                            It is slower and may even tend to fill up memory with tiny useless holes.
+                        </p>
+                        <div class="btn-align">
+                            <button id = "go_button" class="btn btn-primary" onclick="navigate('memory_best_fit.html')">Simulation</button>
+                        </div>
+                    </div></li>
+                    <hr class = "my-4">
+                    <li><div class=" pt-4 pt-lg-6 content d-flex flex-column justify-content-center"
+                        data-aos="fade-up" data-aos-delay="100">
+                        <h3><u>Worst Fit</u></h3>
+                        <ul>
+                            <li>
+                                <div>
+                                    Worst Fit allocates a process to the partition which is largest sufficient among the
+                                    freely available partitions available in the main memory. If a large process comes
+                                    at a later stage, then memory will not have space to accommodate it
+                                </div>
+                            </li>
+                        </ul>
+                        <h4 style="padding-top: 10px;">Advantages</h4>
+                        <p>
+                            Since this process chooses the largest hole/partition, therefore there will be large
+                            internal fragmentation. Now, this internal fragmentation will be quite big so that other
+                            small processes can also be placed in that leftover partition. </p>
+                        <h4>Disadvantages</h4>
+                        <p>
+                            It is a slow process because it traverses all the partitions in the memory and then selects
+                            the largest partition among all the partitions, which is a time-consuming process.
+                        </p>
+                        <div class="btn-align">
+                            <button id = "go_button" class="btn btn-primary" onclick="navigate('memory_worst_fit.html')">Simulation</button>
+                        </div>
+                    </div></li>
+                </ul>
+            </div>
+            </p>
+        </div>
+    </body>
+</html>
