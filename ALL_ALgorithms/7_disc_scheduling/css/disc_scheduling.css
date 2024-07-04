@@ -1,0 +1,211 @@
+body:before{
+    content:"";
+	position:fixed;
+	left:0;
+	top:0;
+	right:0;
+	bottom:0;
+	z-index:-1; 
+    background-color: rgb(34, 29, 40); 
+    /* linear-gradient(to bottom, rgba(57, 23, 194, 1), rgba(146, 25, 156, 1)); */
+}
+
+.horizontal-list{
+    display:flex;
+    color: white;
+    justify-content: space-evenly;
+}
+
+.horizontal-list li {
+    flex-basis: 0;
+    flex-grow: 1;
+}
+
+.mainTitle{
+    text-align: center;
+    color: white;
+    font-weight: bold;
+    font-size: 40pt
+}
+
+.chart-container {
+    margin-bottom: 300px;
+}
+
+#chart {
+    margin-top: 2.5%;
+    margin-left: auto;
+    margin-right: auto;
+    width: 80%;
+    height: 0px;
+    border: 1px solid #ccc;
+    position: relative;
+}
+  
+#chart .marker {
+    position: absolute;
+    width: 1px;
+    height: 10px;
+    background-color: #ccc;
+}
+
+#chart .label {
+    position: absolute;
+    font-size: 16px;
+    color: #ccc;
+    top: 20px;
+    transform: translateX(-50%);
+}
+
+#max_input {
+    position: relative;
+    top: 0px;
+    width: 100%;
+    left: 0px;
+}
+
+#string_input {
+    position: relative;
+    width: 120%;
+    top: 0px;
+    left: 0px;
+}
+ 
+#head_input {
+    position: relative;
+    top: 0px;
+    width: 100%;
+    left: 0px;
+}
+
+#total_seek {
+    position: relative;
+    color: white;
+    width: 100%;
+    left: 0px;
+    border-width: 2px;
+}
+
+.form_group {
+    position: relative;
+    padding-left: 10%;
+    padding-right: 10%;
+    display: flex;
+    justify-content: space-between
+}
+
+.field {
+    display: flex;
+    flex-direction: column;
+}
+
+
+.field>label {
+    color: #fff;
+    position: relative;
+    top: 0px;
+    left: 0%;
+}
+
+.field>input {
+    position: relative;
+}
+
+.dropbtn {
+    position: relative;
+    background-color: white;
+    color: black;
+    width: 150%;
+    padding: 5px;
+    font-size: 14px;
+    border: none;
+    cursor: pointer;
+  }
+
+.dropdown {
+    position: relative;
+}
+
+.dropdown-content {
+    display: none;
+    position: absolute;
+    background-color: #f9f9f9;
+    min-width: 120px;
+    box-shadow: 0px 8px 16px 0px rgba(0,0,0,0.2);
+    z-index: 1;
+}
+  
+.dropdown:hover .dropdown-content {
+    display: flex;
+    flex-direction: column;
+}
+
+.option {
+    cursor: pointer;
+    border: none;
+    align-items: center;
+    size: 14px;
+    color: white;
+    padding-bottom: 10px;
+    background-color: rgb(40, 30, 79);
+}
+
+.option:hover {
+    color: white;
+    background-color: rgb(80, 55, 83);
+}
+
+
+#go_button {
+    cursor: pointer;
+    position: relative;
+}
+
+#head {
+    position: relative;
+    margin-left: 10%;
+    margin-right: 10%;
+    margin-top: 20px;
+    height: 30px;
+    width: 1px;
+    background-color: red;
+}
+
+.dot {
+    position: relative;
+    margin-left: 10%;
+    margin-bottom: 30px;
+    height: 10px;
+    width: 10px;
+    background-color: white;
+    border-radius: 100%;
+}
+
+.line {
+    content: "";
+    position: absolute;
+    border: 2px solid white;
+}
+
+
+.jumbotron {
+    margin-left: 1%;
+    margin-right: 1%;
+    margin-top: 5%;
+    background-color: rgb(54, 49, 60);
+    padding-bottom: 10px;
+    padding-top: 20px;
+}
+
+.display-4 {
+    color: white;
+    text-align: center;
+}
+
+.my-4 {
+    border-color: white;
+}
+
+.lead {
+    color: white;
+}

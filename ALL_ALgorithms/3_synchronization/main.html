@@ -1,0 +1,39 @@
+<!DOCTYPE html>
+<html>
+<head>
+    <meta charset="UTF-8">
+    <title>Inter and Intra Process Communication</title>
+    <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.1.3/dist/js/bootstrap.bundle.min.js"
+        integrity="sha384-ka7Sk0Gln4gmtz2MlQnikT1wXgYsOg+OMhuP+IlRH9sENBO0LRn5q+8nbTov4+1p"
+        crossorigin="anonymous"></script>
+    <link rel="stylesheet" href="styles.css">
+</head>
+<body>
+    <div class="jumbotron">
+        <div class="container", style="color: white;">
+            <h1>Synchronization</h1>
+            <p>
+                Synchronization in computing refers to the coordination of multiple processes or threads to ensure orderly and
+                predictable execution. It is crucial in multi-tasking environments where processes or threads share resources 
+                or need to communicate with each other
+            </p>
+
+            <hr class = "my-4">
+            <h2>1) Process Synchronization:</h2>
+            <p>
+                Processes are independent units of execution that run concurrently and can share resources like memory or files.
+                Various mechanisms like semaphores, mutexes, and message passing
+            </p>
+            <button class="shared-memory-button" onclick="window.location.href='1_processSynchronization/processSynchronization.html'">Process Synchronization Simulations</button>
+            
+            <hr class = "my-4">
+            <h2>2) Message Passing:</h2>
+            <p>
+                Threads are lightweight units of execution within a process that share the same memory space and resources.Various mecahnism are  mutexes (mutual exclusion) and condition variables. Mutexes ensure that only one thread can access a shared resource at a time, while condition variables enable threads to wait for a specific condition to be met before proceeding
+            </p>
+            <button class="ipc-button" onclick="window.location.href='2_thread_synchronization/thread_sync.html'">Thread Synchronization Simulations</button>
+        </div>
+        
+    </div>
+</body>
+</html>

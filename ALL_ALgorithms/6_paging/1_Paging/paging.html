@@ -1,0 +1,181 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta http-equiv="X-UA-Compatible" content="IE=edge">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <link rel="stylesheet" href="paging.css">
+    <title>Paging Techniques</title>
+</head>
+<body>
+    <div class="jumbotron">
+        <h1 class="display-4">Paging</h1>
+        <hr class = "my-4">
+        <p class="lead">
+            Paging is a memory management scheme that eliminates the need for contiguous allocation of physical memory. <br>This scheme permits the physical address space of a process to be non – contiguous.
+            <br>
+            The mapping from virtual to physical address is done by the memory management unit (MMU) which is a hardware device and this mapping is known as paging technique.
+        <p class = "my-4">
+         
+          <br>
+           
+        </p>
+        
+    </div>
+    <form action="#">
+        <div id="inputs"  class="colors">
+            
+             <br>
+            <div class="frame-details">
+                Enter the number of pages:<br>
+                <input type="number" id="no_of_pages" required>
+            </div>
+            <div class="error" id="error1">
+                
+            </div>
+            <br>
+            
+             <br>
+            <div class="frame-details">
+                Enter the number of frames:<br>
+                <input type="number" id="no_of_frames" required>
+            </div>
+            <div class="error" id="error3">
+                
+            </div>
+            <br>
+           
+           <br>
+            <div class="frame-details">
+                Enter the size of a page/frame: <br>
+                <input type="number" id="size_of_page" required>
+            </div>
+            <div class="error" id="error2">
+                
+            </div>
+            <br>
+            <br>    
+            <div class="frame-details">
+                Enter the frame number allotted for each page: <br>
+                <input type="text" id="frame_string" required>
+            </div>
+            <div class="error frame-details" id="error4">
+               
+            </div>
+            <br>
+          
+            <div class="frame-details">
+                Enter the page number: <br>
+                <input type="number" id="logical_address" required>
+            </div>
+           <br><br>
+            <div class="frame-details">
+                Enter the offset: <br>
+                <input type="number" id="off" required>
+            </div>
+            <div class="error frame-details" id="error5">
+                
+            </div>
+    
+            </div>
+            <br>
+            </div>
+            
+            <center style="display: flex; justify-content: center">
+            
+            <input class="btn" type="button" onclick="solve()" id="run" value="Process">
+    
+            <input class="btn" type="button" value="Delete A Row" onclick="document.getElementById('Table').deleteRow(1);">
+    
+            <input class="btn" type="button" value="reset" onclick="reset()">
+            </center>
+    <br>
+    
+    </form>
+
+            <div class="table" style="width: 60%; max-height: 15em; overflow-y: auto; margin: auto">            
+                    <table id="Table" class="colors" border="2" style="text-align: center; width: 100%;">
+                        <thead>
+                            <tr>
+                                <th>No. of pages </th>
+                                <th>Size of a page/frame</th>
+                                <th>Number of frames</th>
+                                <th>Frame numbers allotted</th>
+                                <th>Page Number</th>
+                                <th>Offset</th>
+                                <th>&nbsp; &nbsp; <u> Physical Address </u>&nbsp; &nbsp;</th>
+                            </tr>
+                        </thead>
+                        <tbody>
+                           
+                        </tbody>
+                    </table>
+            </div>
+    
+</div>
+<script defer>
+    var solve = function () {
+        console.log("here");
+        var no_pages = parseInt(document.getElementById("no_of_pages").value);
+        var size = parseInt(document.getElementById("size_of_page").value);
+        var no_frames = parseInt(document.getElementById("no_of_frames").value);
+        var frame_string = document.getElementById("frame_string").value;
+        var page = parseInt(document.getElementById("logical_address").value);
+        var offset = parseInt(document.getElementById("off").value);
+        var arr = new Array();
+        arr = frame_string.split(' ').map(Number);
+        for (i = 1; i <= 5; i++)
+            document.getElementById("error" + i).style.visibility = "hidden";
+        var err = "";
+        if (isNaN(no_pages)) err += 1;
+        if (isNaN(size)) err += 2;
+        if (isNaN(no_frames)) err += 3;
+        if (frame_string === "") err += 4;
+        if (isNaN(page)) err += 5;
+
+        if (err != "") {
+            for (i = 0; i < err.length; i++)
+                document.getElementById("error" + err[i]).style.visibility = "visible";
+            return;
+        }
+        if (arr.length != no_pages) {
+            alert("number of pages and page table rows does not match!!!");
+            return;
+        }
+        if (no_pages > no_frames) {
+            alert("no. of pages are greater than the no. of frames!!!");
+            return;
+        }
+        
+        
+        var table = document.getElementById("Table");
+        var row = table.insertRow(1);
+        var cell0 = row.insertCell(0);
+        cell0.innerHTML = no_pages;
+        var cell1 = row.insertCell(1);
+        cell1.innerHTML = size;
+        var cell2 = row.insertCell(2);
+        cell2.innerHTML = no_frames;
+        var cell3 = row.insertCell(3);
+        cell3.innerHTML = frame_string;
+        var cell4 = row.insertCell(4);
+        cell4.innerHTML = page;
+        var cell5 = row.insertCell(5);
+        cell5.innerHTML = offset;
+
+        var cell6 = row.insertCell(6);
+
+        if (page >= no_pages || arr[page] == -1) {
+            cell6.innerHTML = "<strong>Address Not Found!!!</strong>";
+            cell6.bgColor="red";
+        }
+        else{ cell6.innerHTML = ((arr[page] * size) + offset);
+        cell6.bgColor="green";}
+    }
+</script>
+    
+    
+</body>
+</html>
+
+    

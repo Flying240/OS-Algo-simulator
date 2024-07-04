@@ -1,0 +1,75 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+    <meta charset="UTF-8">
+    <meta http-equiv="X-UA-Compatible" content="IE=edge">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Document</title>
+    <link rel="stylesheet" type="text/css" href="https://stackpath.bootstrapcdn.com/bootstrap/4.5.0/css/bootstrap.min.css">
+    <link rel="stylesheet" href="css/disc_scheduling.css">
+</head>
+
+<body>
+    <div class="jumbotron">
+        <h1 class="display-4">Disc Scheduling</h1>
+        <hr class = "my-4">
+        <p class="lead">
+            Disc scheduling is an important process in operating systems that determines the order in which disk access requests are serviced. The objective of disc scheduling is to minimize the time it takes to access data on the disk and to minimize the time it takes to complete a disk access request.</p>
+        <p class = "my-4">
+            <ul class="horizontal-list">
+                <li>FCFS Algorithm</li>
+                <li>SCAN Algorithm</li>
+                <li>C-SCAN Algorithm</li>
+                <li>SSTF Algorithm</li>
+            </ul>
+        </p>
+    </div>
+    <div class="form_group">
+        <div class="field">
+            <label for="head_input">Head Position</label>
+            <input type="number" id="head_input" placeholder="0" onkeydown="initHead(event)" />
+        </div>
+        
+        <div class="field">
+            <label for="string_input">Sequence String</label>
+            <input type="text" id="string_input" placeholder="Enter request sequence" onkeydown="updateMarkers(event)" />
+        </div>
+        
+        <div class="field">
+            <label for="max_input">Maximum Position</label>
+            <input type="number" id="max_input" placeholder="200" onkeydown="changeMaximum(event)" />
+        </div>
+
+        <div class="field">
+            <label for="dropdown">&nbsp</label>
+            <div class="dropdown">
+                <button class="dropbtn">Algorithm</button>
+                <div class="dropdown-content" id="dd">
+                <button class ="option" onclick="setAlgorithm(event)">FCFS</button>
+                <button class ="option" onclick="setAlgorithm(event)">SCAN</button>
+                <button class ="option" onclick="setAlgorithm(event)">C-SCAN</button>
+                <button class ="option" onclick="setAlgorithm(event)">SSTF</button>
+                </div>
+            </div>
+        </div>  
+
+        <div class="field">
+            <label for="total_seek">&nbsp</label>
+            <div id="total_seek">Total Seek =</div>
+        </div>
+
+        <div class="field">
+            <label for="go_button">&nbsp</label>
+            <button id = "go_button" class="btn btn-primary" onclick="beginAnimation()">Run</button>
+        </div>
+    </div>
+    <div class="chart-container">
+        <div id="chart"></div>
+        <div id="head">&nbsp</div>
+    </div>
+
+    <script src="../disc_scheduling/js/disc_scheduling.js"></script>
+</body>
+
+</html>
