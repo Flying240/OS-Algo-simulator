@@ -1,0 +1,36 @@
+/* Set background color and font color for dark theme */
+body {
+	background-color: #222;
+	color: #fff;
+  }
+  
+  /* Adjust background and font color for specific elements */
+  .panel-default {
+	background-color: #333;
+	color: #fff;
+  }
+  
+  .panel-heading {
+	background-color: #444;
+	color: #fff;
+  }
+  
+  .list-group-item {
+	background-color: #333;
+	color: #fff;
+  }
+  
+  /* Visualization CSS */
+  #controller {
+	padding-left: 0px;
+	padding-right: 0px;
+  }
+  
+  .code-panel {
+	padding: 0px 0px 0px;
+  }
+  
+  .panel-label {
+	float: right;
+  }
+  

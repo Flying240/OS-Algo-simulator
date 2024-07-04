@@ -1,0 +1,74 @@
+<!DOCTYPE html>
+<html>
+<head>
+  <meta charset="utf-8">
+    <meta content="width=device-width, initial-scale=1.0" name="viewport">
+
+    <title>Thread Synchronisation Techniques</title>
+    <meta content="" name="description">
+    <meta content="" name="keywords">
+    <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.1.3/dist/js/bootstrap.bundle.min.js"
+        integrity="sha384-ka7Sk0Gln4gmtz2MlQnikT1wXgYsOg+OMhuP+IlRH9sENBO0LRn5q+8nbTov4+1p"
+        crossorigin="anonymous"></script>
+    <link rel="stylesheet" href="style.css">
+    <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.1.3/dist/css/bootstrap.min.css" rel="stylesheet"
+        integrity="sha384-1BmE4kWBq78iYhFldvKuhfTAU6auU8tT94WrHftjDbrCEXSU1oBoqyl2QvZ6jIW3" crossorigin="anonymous">
+
+</head>
+<body>
+  <div class="jumbotron", style="color:white">
+  <header style="text-align: center; padding: 40px;">
+  <h1 class=" display-4">Thread Synchronisation</h1>
+  </header>
+  <p style="padding-left: 40px; padding-right: 40px;">Thread synchronization refers to the coordination and orderly execution of multiple threads in a concurrent program. It ensures that threads access shared resources or critical sections in a mutually exclusive manner to prevent data races and maintain program correctness.
+
+    <br><br>A mutex (short for mutual exclusion) is a synchronization primitive commonly used to protect critical sections of code. It allows only one thread to access the protected resource at a time. When a thread acquires a mutex, it gains exclusive access to the associated resource, preventing other threads from accessing it concurrently. This helps to avoid conflicts, race conditions, and data corruption that may occur when multiple threads try to access shared data simultaneously.
+    
+    <br><br>By using a mutex, threads can take turns accessing shared resources, ensuring consistency and preventing unpredictable behavior. It provides a simple and effective way to establish a mutually exclusive region where only one thread can operate at any given time. Mutexes help maintain thread safety and facilitate proper synchronization, making concurrent programs more reliable and robust.</p>
+  <hr class="my-4">
+  <div style="padding-top: 20px; padding-left: 40px; padding-bottom: 40px;">
+  <button id = "go_button" class="btn btn-primary" onclick="startSimulation()">Start Simulation</button>
+
+  </div>
+  <u>
+  <h2  style="padding-left: 40px;">Output:</h2></u>
+  <div style="display: inline-flex; flex-direction: row;">
+    <div style="text-align: right; padding: 40px;", id="output1"></div>
+    <div style="text-align: left; padding: 40px;", id="output2"></div>
+  </div>
+  
+
+  <script>
+    let workerMutex = new Worker('threadMutex.js');
+    let workerNoMutex = new Worker('threadNoMutex.js');
+    let outputDiv1 = document.getElementById('output1');
+    let outputDiv2 = document.getElementById('output2');
+
+    function startSimulation() {
+      workerMutex.onmessage = function (event) {
+        appendToOutput1(event.data);
+      };
+
+      workerNoMutex.onmessage = function (event) {
+        appendToOutput2(event.data);
+      };
+
+      workerMutex.postMessage('start');
+      workerNoMutex.postMessage('start');
+    }
+
+    function appendToOutput1(message) {
+      let newLine = document.createElement('p');
+      newLine.textContent = message;
+      outputDiv1.appendChild(newLine);
+    }
+
+    function appendToOutput2(message) {
+      let newLine = document.createElement('p');
+      newLine.textContent = message;
+      outputDiv2.appendChild(newLine);
+    }
+  </script>
+  </div>
+</body>
+</html>

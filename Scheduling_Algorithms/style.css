@@ -1,0 +1,122 @@
+body
+{
+    accent-color: rgb(54, 49, 60);
+}
+.controller
+{
+    
+    align-items: flex-end;
+    flex-direction: row;
+}
+button
+{
+    position: fixed;
+
+}
+input[type=button]:hover
+{
+    background-color: white;
+    color:black;
+}
+input[type=button]
+{
+    background-color:rgb(54, 49, 60);
+    color: white;
+}
+
+
+.jumbotron {
+    margin-left: 1%;
+    margin-right: 1%;
+    margin-top: 5%;
+    background-color: rgb(54, 49, 60);
+    padding-bottom: 10px;
+    padding-top: 20px;
+}
+.display-4 {
+    color: white;
+    text-align: center;
+}
+
+.my-4 {
+    border-color: white;
+}
+
+.lead {
+    color: white;
+}
+*
+{
+    color:white;
+}
+input
+{
+    color: black;
+}
+
+fresh th {
+    background-color:rgb(34, 29, 40); 
+    text-align: left;
+    border: 1px solid grey;
+    height: 400 px;
+    
+}
+fresh td {
+    border: 1px solid grey;
+    border-bottom: 0;
+    /*border-right: 0;*/
+    height: 20px;
+    text-align: left;
+}
+
+div th, div td {
+    border: 1px solid grey;
+    text-align: center;
+}
+table {
+    display: inline;
+    border-collapse: collapse;
+}
+input {
+    text-align: center;
+}
+#curtain {
+    background-color:rgb(34, 29, 40); 
+}
+
+
+h2{
+font-size: 20px;
+color: #ff0031;
+}
+
+h1{
+font-size: 55px;
+color:    #933648;
+}
+
+h4{
+color:    #933648;
+font-size: 25px;
+
+}
+.container {
+width: 1100px;
+margin-left: auto;
+margin-right: auto;
+
+font-size: 17px;
+text-align: center
+
+}
+
+.about{
+color: grey;
+font-size: 35px;
+}
+
+.zaz{ color:    #933648;
+    color: white;
+font-size: 30px;
+
+}

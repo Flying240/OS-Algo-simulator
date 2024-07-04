@@ -1,0 +1,44 @@
+
+
+body{
+    margin: 0px;
+    overflow: hidden;
+}
+.container{
+    display: flex;
+    justify-content: space-between;
+
+}
+.button{
+    padding: 0;
+    width: 50vw;
+    height: 100vh;
+    background-color: #121212;
+    border: none;
+
+    font-family: Impact, Haettenschweiler, 'Arial Narrow Bold', sans-serif;
+    font-style: normal; 
+    font-weight: 400;
+    font-size: 150px;
+    color: #fff;
+}
+
+.button:hover {
+    background-color: #fff;
+    cursor: pointer;
+    color: #121212;
+}
+
+.button-1{
+    animation-name: slideInLeft;
+    animation-duration: 2s;
+    animation-timing-function: ease-in;
+
+    border-right: 1px solid white;
+}
+.button-2{
+    animation-name: slideInRight;
+    animation-duration: 2s;
+    animation-timing-function: ease-in;
+}
+
